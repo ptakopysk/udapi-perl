@@ -2,6 +2,8 @@ package Udapi::Block::Rur::POSfactors;
 use Udapi::Core::Common;
 extends 'Udapi::Core::Block';
 
+has_ro dir => ( isa=>Bool, default => 0 );
+
 sub process_node {
     my ($self, $node) = @_;
 
@@ -13,6 +15,11 @@ sub process_node {
     my $next_upos = "EOS";
     if (defined $node->next_node()) {
         $next_upos = $node->next_node()->upos;
+    }
+
+    if ($self->dir) {
+        $prev_upos = $prev_upos . '-';
+        $next_upos = $next_upos . '+';
     }
 
     print $node->form . "\t" . $prev_upos . "\n";
