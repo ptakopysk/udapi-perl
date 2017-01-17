@@ -4,6 +4,8 @@ extends 'Udapi::Core::Block';
 
 use Text::Unidecode;
 
+has to => ( is => 'rw', default => 'form' );
+
 sub process_node {
     my ($self, $node) = @_;
 
@@ -21,7 +23,13 @@ sub process_node {
             if ($new_form eq '') {
                 $new_form = '_';
             }
-            $node->set_form($new_form);
+            if ($self->to eq 'form') {
+                $node->set_form($new_form);
+            } elsif ($self->to eq 'lemma') {
+                $node->set_lemma($new_form);
+            } else {
+                die("Invalid to parameter!\n");
+            }
         } else {
             warn "Cannot devowel '$form', bacause deaccented '$form_nodia' has different length\n";
         }
